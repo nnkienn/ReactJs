@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useReducer, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import TodoItem from './components/ToDoItem'
 import type { ToDo } from './components/types'
+import { todoReducer } from './Reducer/todoReducer';
 
 function App() {
 
   type FilterType = "all" | "completed" | "uncompleted";
 
-  const [todoList, setToDolist] = useState<ToDo[]>([])
+  const [todoList, dispath] = useReducer(todoReducer,[])
   const [inputText, setInputText] = useState<string>("")
   const [filter, setFilter] = useState<FilterType>("all")
 
@@ -49,23 +50,15 @@ function App() {
       CreatedAt: new Date().toLocaleString()
     }
 
-    setToDolist((prev) => [...prev, NewTodoObject])
+    dispath({type : "ADD_TODO", payload:NewTodoObject})
     setInputText("")
   }
   const handleToggleTodo = (idchange: string) => {
-    const setChange = todoList.map((value) => {
-      if (idchange === value.id) {
-        return { ...value, completed: !value.completed }
-      }
-      return value;
-    })
-    setToDolist(setChange)
+    dispath({type:"TOGGLE_TODO" , payload:idchange})
   }
   const handleDeleteList = (idDelete: string) => {
-    setToDolist((prev) => prev.filter((value) => {
-      return value.id !== idDelete
-    })
-    )
+    dispath({type:"DELETE_TODO" , payload:idDelete})
+
   }
 
   return (
