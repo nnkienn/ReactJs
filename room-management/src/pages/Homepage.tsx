@@ -1,7 +1,3 @@
-export default function HomePage(){
-    return(
-        <div>
-            
-        </div>
-    )
+export default function HomePage() {
+  return <h1>🏠 Trang chủ</h1>
 }
